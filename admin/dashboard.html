@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Ambica Marketing</title>
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h2><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h2>
+            <div class="admin-user">
+                <span id="adminName">Admin</span>
+                <button onclick="logout()" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </header>
+
+        <nav class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('overview')">
+                <i class="fas fa-chart-bar"></i> Overview
+            </button>
+            <button class="nav-btn" onclick="showSection('business-categories')">
+                <i class="fas fa-building"></i> Business Categories
+            </button>
+            <button class="nav-btn" onclick="showSection('product-categories')">
+                <i class="fas fa-tags"></i> Product Categories
+            </button>
+            <button class="nav-btn" onclick="showSection('products')">
+                <i class="fas fa-box"></i> Products
+            </button>
+            <button class="nav-btn" onclick="showSection('contacts')">
+                <i class="fas fa-envelope"></i> Contacts
+            </button>
+            <button class="nav-btn" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Settings
+            </button>
+        </nav>
+
+        <main class="admin-main">
+            <!-- Overview Section -->
+            <section id="overview" class="admin-section active">
+                <h3>Dashboard Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-box"></i>
+                        <div class="stat-info">
+                            <h4 id="totalProducts">0</h4>
+                            <p>Total Products</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-building"></i>
+                        <div class="stat-info">
+                            <h4 id="totalBusinessCategories">0</h4>
+                            <p>Business Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tags"></i>
+                        <div class="stat-info">
+                            <h4 id="totalProductCategories">0</h4>
+                            <p>Product Categories</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-envelope"></i>
+                        <div class="stat-info">
+                            <h4 id="totalContacts">0</h4>
+                            <p>Total Contacts</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recent-section">
+                    <h4>Recent Contacts</h4>
+                    <div id="recentContacts" class="recent-list"></div>
+                </div>
+            </section>
+
+            <!-- Business Categories Section -->
+            <section id="business-categories" class="admin-section">
+                <div class="section-header">
+                    <h3>Business Categories</h3>
+                    <button onclick="showModal('businessCategoryModal')" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Slug</th>
+                                <th>Icon</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="businessCategoriesTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Product Categories Section -->
+            <section id="product-categories" class="admin-section">
+                <div class="section-header">
+                    <h3>Product Categories</h3>
+                    <button onclick="showModal('productCategoryModal')" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Category
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Business Category</th>
+                                <th>Slug</th>
+                                <th>Icon</th>
+                                <th>Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productCategoriesTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="products" class="admin-section">
+                <div class="section-header">
+                    <h3>Products</h3>
+                    <button onclick="showModal('productModal')" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+                
+                <div class="filters">
+                    <select id="businessCategoryFilter" onchange="filterProducts()">
+                        <option value="">All Business Categories</option>
+                    </select>
+                    <select id="productCategoryFilter" onchange="filterProducts()">
+                        <option value="">All Product Categories</option>
+                    </select>
+                    <select id="statusFilter" onchange="filterProducts()">
+                        <option value="">All Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Business Category</th>
+                                <th>Product Category</th>
+                                <th>Price</th>
+                                <th>Featured</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Contacts Section -->
+            <section id="contacts" class="admin-section">
+                <div class="section-header">
+                    <h3>Contact Messages</h3>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Product Interest</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactsTable"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="admin-section">
+                <h3>Website Settings</h3>
+                <form id="settingsForm" class="admin-form">
+                    <div class="form-group">
+                        <label>Company Name</label>
+                        <input type="text" id="companyName" name="company_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Email</label>
+                        <input type="email" id="companyEmail" name="company_email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Phone</label>
+                        <input type="text" id="companyPhone" name="company_phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Address</label>
+                        <textarea id="companyAddress" name="company_address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Company Description</label>
+                        <textarea id="companyDescription" name="company_description" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number</label>
+                        <input type="text" id="whatsappNumber" name="whatsapp_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Working Hours</label>
+                        <input type="text" id="workingHours" name="working_hours" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <!-- Business Category Modal -->
+    <div id="businessCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="businessCategoryModalTitle">Add Business Category</h3>
+                <span class="close" onclick="closeModal('businessCategoryModal')">&times;</span>
+            </div>
+            <form id="businessCategoryForm" class="admin-form">
+                <input type="hidden" id="businessCategoryId" name="id">
+                <div class="form-group">
+                    <label>Name <i class="fas fa-asterisk"></i></label>
+                    <input type="text" id="businessCategoryName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="businessCategoryDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Icon Class (FontAwesome)</label>
+                    <input type="text" id="businessCategoryIcon" name="icon_class" placeholder="fas fa-building">
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" id="businessCategoryOrder" name="display_order" value="0">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="businessCategoryActive" name="is_active" checked>
+                        Active
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('businessCategoryModal')" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Category Modal -->
+    <div id="productCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productCategoryModalTitle">Add Product Category</h3>
+                <span class="close" onclick="closeModal('productCategoryModal')">&times;</span>
+            </div>
+            <form id="productCategoryForm" class="admin-form">
+                <input type="hidden" id="productCategoryId" name="id">
+                <div class="form-group">
+                    <label>Business Category <i class="fas fa-asterisk"></i></label>
+                    <select id="productCategoryBusiness" name="business_category_id" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Name <i class="fas fa-asterisk"></i></label>
+                    <input type="text" id="productCategoryName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productCategoryDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Icon Class (FontAwesome)</label>
+                    <input type="text" id="productCategoryIcon" name="icon_class" placeholder="fas fa-tag">
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input type="number" id="productCategoryOrder" name="display_order" value="0">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productCategoryActive" name="is_active" checked>
+                        Active
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('productCategoryModal')" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Add Product</h3>
+                <span class="close" onclick="closeModal('productModal')">&times;</span>
+            </div>
+            <form id="productForm" class="admin-form" enctype="multipart/form-data">
+                <input type="hidden" id="productId" name="id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Business Category <i class="fas fa-asterisk"></i></label>
+                        <select id="productBusinessCategory" name="business_category_id" required onchange="loadProductCategories()"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Product Category</label>
+                        <select id="productCategory" name="product_category_id"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Name <i class="fas fa-asterisk"></i></label>
+                    <input type="text" id="productName" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label>
+                    <input type="text" id="productShortDescription" name="short_description">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" name="description" rows="4"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="number" id="productPrice" name="price" step="0.01" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Display Order</label>
+                        <input type="number" id="productOrder" name="display_order" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input type="file" id="productImage" name="image" accept="image/*">
+                    <div id="currentImage" class="current-image"></div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productFeatured" name="is_featured">
+                        Featured Product
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="productActive" name="is_active" checked>
+                        Active
+                    </label>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeModal('productModal')" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html> 

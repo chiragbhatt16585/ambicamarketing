@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Troubleshooting - Ambica Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1f2937;
+            margin-top: 2rem;
+        }
+        .step {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #2563eb;
+        }
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .test-logo {
+            border: 2px dashed #2563eb;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+        .test-logo img {
+            max-height: 50px;
+            max-width: 200px;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-bug"></i> Logo Troubleshooting Guide</h1>
+        
+        <div class="success">
+            <strong>Let's fix your logo display issue!</strong> Follow these steps to get your logo showing properly.
+        </div>
+
+        <h2><i class="fas fa-search"></i> Step 1: Check File Location</h2>
+        <div class="step">
+            <p><strong>Your logo should be located at:</strong></p>
+            <code>ambicamarketing/assets/images/logo.png</code>
+            
+            <p><strong>Common issues:</strong></p>
+            <ul>
+                <li>File is in wrong folder</li>
+                <li>File name is different (case-sensitive)</li>
+                <li>File extension is wrong (.jpg instead of .png)</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-file-image"></i> Step 2: Check File Name</h2>
+        <div class="step">
+            <p><strong>Your logo file must be named exactly:</strong></p>
+            <code>logo.png</code>
+            
+            <p><strong>NOT:</strong></p>
+            <ul>
+                <li>Logo.png (capital L)</li>
+                <li>logo.PNG (capital extension)</li>
+                <li>logo.jpg or logo.jpeg</li>
+                <li>ambica-logo.png</li>
+                <li>company-logo.png</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-cog"></i> Step 3: Test Logo Display</h2>
+        <div class="test-logo">
+            <p><strong>Testing your logo:</strong></p>
+            <img src="assets/images/logo.png" alt="Test Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <p style="display: none; color: red;"><i class="fas fa-exclamation-triangle"></i> Logo not found! Check file location and name.</p>
+            <p style="display: none; color: green;"><i class="fas fa-check-circle"></i> Logo found and displaying!</p>
+        </div>
+
+        <h2><i class="fas fa-tools"></i> Step 4: Common Solutions</h2>
+        
+        <div class="warning">
+            <h3>Solution 1: Rename Your File</h3>
+            <p>If your logo has a different name, rename it to <code>logo.png</code></p>
+        </div>
+
+        <div class="warning">
+            <h3>Solution 2: Convert File Format</h3>
+            <p>If your logo is JPG, convert it to PNG format</p>
+        </div>
+
+        <div class="warning">
+            <h3>Solution 3: Check File Path</h3>
+            <p>Make sure the file is in the correct folder: <code>assets/images/</code></p>
+        </div>
+
+        <div class="warning">
+            <h3>Solution 4: Clear Browser Cache</h3>
+            <p>Press Ctrl+F5 (or Cmd+Shift+R on Mac) to refresh without cache</p>
+        </div>
+
+        <h2><i class="fas fa-code"></i> Step 5: Alternative File Names</h2>
+        <div class="step">
+            <p>If you want to use a different filename, update the HTML code:</p>
+            <code>&lt;img src="assets/images/YOUR-LOGO-FILENAME.png" alt="Ambica Marketing" class="logo-img"&gt;</code>
+            
+            <p><strong>Common alternatives:</strong></p>
+            <ul>
+                <li><code>assets/images/ambica-logo.png</code></li>
+                <li><code>assets/images/company-logo.png</code></li>
+                <li><code>assets/images/logo.jpg</code> (if using JPG)</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-check-circle"></i> Step 6: Verify Success</h2>
+        <div class="step">
+            <p>After making changes:</p>
+            <ol>
+                <li>Save your file with the correct name</li>
+                <li>Clear browser cache (Ctrl+F5)</li>
+                <li>Refresh the page</li>
+                <li>Check if logo appears in the header</li>
+            </ol>
+        </div>
+
+        <h2><i class="fas fa-link"></i> Quick Actions</h2>
+        <a href="index.html" class="btn"><i class="fas fa-home"></i> Check Website</a>
+        <a href="upload-guide.html" class="btn"><i class="fas fa-upload"></i> Upload Guide</a>
+        <a href="admin/login.html" class="btn"><i class="fas fa-cog"></i> Admin Panel</a>
+
+        <div class="error">
+            <h3><i class="fas fa-exclamation-triangle"></i> Still Not Working?</h3>
+            <p>If your logo still doesn't appear:</p>
+            <ul>
+                <li>Check file permissions (should be readable)</li>
+                <li>Verify file isn't corrupted</li>
+                <li>Try a different browser</li>
+                <li>Check browser developer tools (F12) for errors</li>
+            </ul>
+        </div>
+
+        <div class="success">
+            <strong>Need Help?</strong> The logo should display automatically once the file is in the correct location with the correct name.
+        </div>
+    </div>
+
+    <script>
+        // Test logo loading
+        window.addEventListener('load', function() {
+            const testImg = document.querySelector('.test-logo img');
+            const errorMsg = document.querySelector('.test-logo p[style*="red"]');
+            const successMsg = document.querySelector('.test-logo p[style*="green"]');
+            
+            testImg.onload = function() {
+                errorMsg.style.display = 'none';
+                successMsg.style.display = 'block';
+            };
+            
+            testImg.onerror = function() {
+                errorMsg.style.display = 'block';
+                successMsg.style.display = 'none';
+            };
+        });
+    </script>
+</body>
+</html> 

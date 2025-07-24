@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNC Machine Spare Parts, Oil & Grease | Ambica Marketing</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <img src="assets/images/logo.png" alt="Ambica Marketing" class="logo-img" onerror="this.onerror=null; this.src='assets/images/logo.jpg'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='block';}">
+                    <h2 style="display: none;">Ambica Marketing</h2>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="cnc.html" class="nav-link">CNC Machine Spare Parts</a></li>
+                    <li class="nav-item"><a href="automation.html" class="nav-link">Automation & Road Safety</a></li>
+                    <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="business-detail">
+            <div class="container">
+                <h1>CNC Machine Spare Parts, Oil & Grease</h1>
+            </div>
+        </section>
+        <section class="products">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Our Products</h2>
+                    <p>High quality CNC machine spare parts and lubricants for industrial needs</p>
+                </div>
+                <div class="products-grid" id="productsGrid">
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-grip-lines"></i></div>
+                        <h3 class="product-title">Soft Jaws</h3>
+                        <button class="btn btn-primary" onclick="enquireProduct('Soft Jaws')">Enquire Now</button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-th-large"></i></div>
+                        <h3 class="product-title">T Nut</h3>
+                        <button class="btn btn-primary" onclick="enquireProduct('T Nut')">Enquire Now</button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-oil-can"></i></div>
+                        <h3 class="product-title">Oil & Grease</h3>
+                        <button class="btn btn-primary" onclick="enquireProduct('Oil & Grease')">Enquire Now</button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-cube"></i></div>
+                        <h3 class="product-title">Boring Block</h3>
+                        <button class="btn btn-primary" onclick="enquireProduct('Boring Block')">Enquire Now</button>
+                    </div>
+                    <div class="product-card">
+                        <div class="product-icon"><i class="fas fa-dot-circle"></i></div>
+                        <h3 class="product-title">Sleeve</h3>
+                        <button class="btn btn-primary" onclick="enquireProduct('Sleeve')">Enquire Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="contact" class="contact">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Contact Us</h2>
+                    <p>Get in touch for CNC machine parts and industrial supplies</p>
+                </div>
+                <div class="contact-form">
+                    <form id="contactFormCNC">
+                        <div class="form-group">
+                            <input type="text" id="name" name="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" name="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" name="phone" placeholder="Your Phone">
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="assets/js/main.js"></script>
+</body>
+</html> 

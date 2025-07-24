@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Refresh Issue - Ambica Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8fafc;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2563eb;
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1f2937;
+            margin-top: 2rem;
+        }
+        .step {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #2563eb;
+        }
+        .error {
+            background: #fee2e2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .success {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            color: #92400e;
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .test-section {
+            border: 2px dashed #2563eb;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-sync-alt"></i> Debug Refresh Issue</h1>
+        
+        <div class="success">
+            <strong>Let's identify why your page is refreshing automatically!</strong> This page will help us find the cause.
+        </div>
+
+        <div class="test-section">
+            <h3>Page Load Test</h3>
+            <p>This page loaded at: <span id="loadTime"></span></p>
+            <p>Page refresh count: <span id="refreshCount">0</span></p>
+            <div id="status">Page is stable - no refresh detected</div>
+        </div>
+
+        <h2><i class="fas fa-search"></i> Common Causes</h2>
+        
+        <div class="warning">
+            <h3>1. JavaScript Redirect Loop</h3>
+            <p>Check if there's a redirect in your JavaScript files:</p>
+            <ul>
+                <li>Look for <code>window.location.href</code> or <code>window.location.replace</code></li>
+                <li>Check for automatic redirects in <code>main.js</code></li>
+                <li>Look for admin authentication redirects</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>2. PHP Redirect Issues</h3>
+            <p>If you have PHP files, check for:</p>
+            <ul>
+                <li><code>header("Location: ...")</code> redirects</li>
+                <li>Session redirects</li>
+                <li>Installation script redirects</li>
+            </ul>
+        </div>
+
+        <div class="warning">
+            <h3>3. Meta Refresh Tag</h3>
+            <p>Check your HTML for meta refresh tags:</p>
+            <code>&lt;meta http-equiv="refresh" content="0;url=..."&gt;</code>
+        </div>
+
+        <div class="warning">
+            <h3>4. Browser Cache Issues</h3>
+            <p>Try these solutions:</p>
+            <ul>
+                <li>Clear browser cache (Ctrl+Shift+Delete)</li>
+                <li>Try incognito/private browsing mode</li>
+                <li>Try a different browser</li>
+            </ul>
+        </div>
+
+        <h2><i class="fas fa-tools"></i> Quick Fixes</h2>
+        
+        <div class="step">
+            <h3>Fix 1: Check main.js</h3>
+            <p>Open <code>assets/js/main.js</code> and look for any redirect code. Comment out suspicious lines:</p>
+            <code>// window.location.href = 'some-page.html';</code>
+        </div>
+
+        <div class="step">
+            <h3>Fix 2: Check admin.js</h3>
+            <p>Open <code>admin/admin.js</code> and look for authentication redirects:</p>
+            <code>// this.redirectToDashboard();</code>
+        </div>
+
+        <div class="step">
+            <h3>Fix 3: Remove install.php</h3>
+            <p>If you have <code>install.php</code>, rename or delete it after installation:</p>
+            <code>mv install.php install.php.bak</code>
+        </div>
+
+        <div class="step">
+            <h3>Fix 4: Check .htaccess</h3>
+            <p>Look for any <code>.htaccess</code> files that might have redirects:</p>
+            <code>RewriteRule ^(.*)$ index.html [L]</code>
+        </div>
+
+        <h2><i class="fas fa-link"></i> Test Pages</h2>
+        <a href="index.html" class="btn"><i class="fas fa-home"></i> Test Main Page</a>
+        <a href="admin/login.html" class="btn"><i class="fas fa-cog"></i> Test Admin Login</a>
+        <a href="upload-guide.html" class="btn"><i class="fas fa-upload"></i> Test Upload Guide</a>
+
+        <h2><i class="fas fa-bug"></i> Debug Log</h2>
+        <div class="log" id="debugLog">
+            Debug log will appear here...
+        </div>
+
+        <div class="error">
+            <h3><i class="fas fa-exclamation-triangle"></i> Emergency Fix</h3>
+            <p>If nothing else works, try this temporary fix:</p>
+            <ol>
+                <li>Rename <code>assets/js/main.js</code> to <code>assets/js/main.js.bak</code></li>
+                <li>Rename <code>admin/admin.js</code> to <code>admin/admin.js.bak</code></li>
+                <li>Refresh the page</li>
+                <li>If it works, the issue is in one of these JavaScript files</li>
+            </ol>
+        </div>
+
+        <div class="success">
+            <strong>Need More Help?</strong> Check the browser's developer console (F12) for error messages that might indicate the cause of the refresh.
+        </div>
+    </div>
+
+    <script>
+        // Debug logging
+        let refreshCount = parseInt(localStorage.getItem('refreshCount') || '0');
+        refreshCount++;
+        localStorage.setItem('refreshCount', refreshCount.toString());
+        
+        document.getElementById('loadTime').textContent = new Date().toLocaleString();
+        document.getElementById('refreshCount').textContent = refreshCount;
+        
+        // Log page events
+        const log = document.getElementById('debugLog');
+        function addLog(message) {
+            const time = new Date().toLocaleTimeString();
+            log.innerHTML += `[${time}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        addLog('Page loaded successfully');
+        addLog(`Refresh count: ${refreshCount}`);
+        
+        // Check for common issues
+        window.addEventListener('load', function() {
+            addLog('Window load event fired');
+            
+            // Check for meta refresh
+            const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
+            if (metaRefresh) {
+                addLog('WARNING: Meta refresh tag found!');
+                addLog(`Content: ${metaRefresh.getAttribute('content')}`);
+            }
+            
+            // Check for redirects in scripts
+            const scripts = document.querySelectorAll('script[src]');
+            scripts.forEach(script => {
+                addLog(`Script loaded: ${script.src}`);
+            });
+        });
+        
+        // Monitor for redirects
+        let originalHref = window.location.href;
+        setInterval(() => {
+            if (window.location.href !== originalHref) {
+                addLog(`WARNING: URL changed to ${window.location.href}`);
+                originalHref = window.location.href;
+            }
+        }, 1000);
+        
+        // Check for errors
+        window.addEventListener('error', function(e) {
+            addLog(`ERROR: ${e.message} at ${e.filename}:${e.lineno}`);
+        });
+        
+        // Reset counter after 5 minutes
+        setTimeout(() => {
+            localStorage.removeItem('refreshCount');
+            addLog('Refresh counter reset');
+        }, 300000);
+    </script>
+</body>
+</html> 
