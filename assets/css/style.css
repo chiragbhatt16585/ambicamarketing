@@ -365,6 +365,17 @@ body {
 .product-image {
     width: 100%;
     height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    background: #f8fafc;
+    overflow: hidden;
+}
+.product-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
 }
 
@@ -568,6 +579,54 @@ body {
 .footer-section p {
     color: #d1d5db;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-section p i {
+    color: #1e3a8a;
+    width: 16px;
+    text-align: center;
+}
+
+.footer-section p a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section p a:hover {
+    color: #1e3a8a;
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    color: #d1d5db;
+}
+
+.footer-contact-item i {
+    color: #1e3a8a;
+    width: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.footer-contact-item a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-contact-item a:hover {
+    color: #1e3a8a;
+}
+
+.footer-contact-item span {
+    color: #d1d5db;
 }
 
 .footer-section ul {
@@ -777,3 +836,62 @@ body {
 .business-card .btn {
     margin-top: auto;
 } 
+
+/* Hero Slider Styles */
+.hero-slider-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    min-height: 400px;
+}
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.hero-slide {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+    z-index: 1;
+}
+.hero-slide.active {
+    display: block;
+    position: relative;
+    opacity: 1;
+    z-index: 2;
+}
+.hero-slider-dots {
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+.hero-slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #d1d5db;
+    cursor: pointer;
+    transition: background 0.3s;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.hero-slider-dot.active {
+    background: #1e3a8a;
+    border-color: #1e3a8a;
+}
+@media (max-width: 768px) {
+    .hero-slider-container {
+        min-height: 250px;
+    }
+}
+/* End Hero Slider Styles */ 

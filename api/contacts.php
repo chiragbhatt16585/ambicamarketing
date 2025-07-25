@@ -50,11 +50,11 @@ function handleCreateContact($db) {
     } else {
         // Handle form data
         $data = [
-            'name' => $_POST['name'] ?? '',
-            'email' => $_POST['email'] ?? '',
-            'phone' => $_POST['phone'] ?? '',
-            'message' => $_POST['message'] ?? '',
-            'product_interest' => $_POST['product_interest'] ?? ''
+            'name' => isset($_POST['name']) ? $_POST['name'] : '',
+            'email' => isset($_POST['email']) ? $_POST['email'] : '',
+            'phone' => isset($_POST['phone']) ? $_POST['phone'] : '',
+            'message' => isset($_POST['message']) ? $_POST['message'] : '',
+            'product_interest' => isset($_POST['product_interest']) ? $_POST['product_interest'] : ''
         ];
     }
     
@@ -93,7 +93,7 @@ function handleCreateContact($db) {
 function handleUpdateContact($db) {
     requireAdminAuth();
     
-    $id = intval($_GET['id'] ?? 0);
+    $id = intval(isset($_GET['id']) ? $_GET['id'] : 0);
     if (empty($id)) {
         sendErrorResponse('Contact ID is required');
     }
@@ -136,7 +136,7 @@ function handleUpdateContact($db) {
 function handleDeleteContact($db) {
     requireAdminAuth();
     
-    $id = intval($_GET['id'] ?? 0);
+    $id = intval(isset($_GET['id']) ? $_GET['id'] : 0);
     if (empty($id)) {
         sendErrorResponse('Contact ID is required');
     }
@@ -159,8 +159,8 @@ function sendEmailNotification($contactData) {
     
     Name: {$contactData['name']}
     Email: {$contactData['email']}
-    Phone: {$contactData['phone'] ?? 'Not provided'}
-    Product Interest: {$contactData['product_interest'] ?? 'Not specified'}
+    Phone: " . (isset($contactData['phone']) ? $contactData['phone'] : 'Not provided') . "
+    Product Interest: " . (isset($contactData['product_interest']) ? $contactData['product_interest'] : 'Not specified') . "
     
     Message:
     {$contactData['message']}

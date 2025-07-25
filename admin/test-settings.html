@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 10px 20px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .debug { background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Settings Form Test</h1>
+    
+    <div class="debug" id="debug"></div>
+    
+    <form id="settingsForm">
+        <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" id="companyName" name="company_name">
+        </div>
+        <div class="form-group">
+            <label>Company Email</label>
+            <input type="email" id="companyEmail" name="company_email">
+        </div>
+        <div class="form-group">
+            <label>Company Phone</label>
+            <input type="text" id="companyPhone" name="company_phone">
+        </div>
+        <div class="form-group">
+            <label>Company Address</label>
+            <textarea id="companyAddress" name="company_address" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Company Description</label>
+            <textarea id="companyDescription" name="company_description" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+            <label>WhatsApp Number</label>
+            <input type="text" id="whatsappNumber" name="whatsapp_number">
+        </div>
+        <div class="form-group">
+            <label>Working Hours</label>
+            <input type="text" id="workingHours" name="working_hours">
+        </div>
+        <button type="button" onclick="loadSettings()">Load Settings</button>
+        <button type="button" onclick="testPopulation()">Test Population</button>
+    </form>
+
+    <script>
+        function log(message) {
+            document.getElementById('debug').innerHTML += message + '<br>';
+        }
+
+        async function loadSettings() {
+            try {
+                log('Loading settings...');
+                const response = await fetch('../api/settings.php');
+                const data = await response.json();
+                log('API Response: ' + JSON.stringify(data));
+                
+                if (data.success && data.data) {
+                    populateForm(data.data);
+                } else {
+                    log('No data received');
+                }
+            } catch (error) {
+                log('Error: ' + error.message);
+            }
+        }
+
+        function populateForm(settings) {
+            log('Populating form with: ' + JSON.stringify(settings));
+            
+            const settingMap = {
+                'company_name': 'companyName',
+                'company_email': 'companyEmail',
+                'company_phone': 'companyPhone',
+                'company_address': 'companyAddress',
+                'company_description': 'companyDescription',
+                'whatsapp_number': 'whatsappNumber',
+                'working_hours': 'workingHours'
+            };
+            
+            Object.keys(settings).forEach(key => {
+                const elementId = settingMap[key];
+                if (elementId) {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.value = settings[key] || '';
+                        log(`Set ${elementId} to: ${settings[key]}`);
+                    } else {
+                        log(`Element not found: ${elementId}`);
+                    }
+                }
+            });
+        }
+
+        function testPopulation() {
+            const testData = {
+                'company_name': 'Test Company',
+                'company_email': 'test@example.com',
+                'company_phone': '+1234567890',
+                'company_address': 'Test Address',
+                'company_description': 'Test Description',
+                'whatsapp_number': '+1234567890',
+                'working_hours': '9 AM - 5 PM'
+            };
+            
+            populateForm(testData);
+        }
+    </script>
+</body>
+</html> 

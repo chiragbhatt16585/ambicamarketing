@@ -116,7 +116,27 @@ function handleGetRequest($action, $db) {
             break;
             
         case 'stats':
-            $stats = $db->fetch("CALL GetProductStats()");
+            try {
+                // Try to use stored procedure first
+                $stats = $db->fetch("CALL GetProductStats()");
+            } catch (Exception $e) {
+                // Fallback to direct queries if stored procedure doesn't exist
+                $totalProducts = $db->fetch("SELECT COUNT(*) as total FROM products")['total'];
+                $activeProducts = $db->fetch("SELECT COUNT(*) as total FROM products WHERE is_active = 1")['total'];
+                $featuredProducts = $db->fetch("SELECT COUNT(*) as total FROM products WHERE is_featured = 1")['total'];
+                $businessCategories = $db->fetch("SELECT COUNT(*) as total FROM business_categories")['total'];
+                $productCategories = $db->fetch("SELECT COUNT(*) as total FROM product_categories")['total'];
+                $totalContacts = $db->fetch("SELECT COUNT(*) as total FROM contacts")['total'];
+                
+                $stats = [
+                    'total_products' => $totalProducts,
+                    'active_products' => $activeProducts,
+                    'featured_products' => $featuredProducts,
+                    'business_categories' => $businessCategories,
+                    'product_categories' => $productCategories,
+                    'total_contacts' => $totalContacts
+                ];
+            }
             sendSuccessResponse($stats, 'Product statistics retrieved successfully');
             break;
             
@@ -177,23 +197,21 @@ function handlePostRequest($action, $db) {
             break;
             
         case 'product':
-            $data = json_decode(file_get_contents('php://input'), true);
-            
-            $businessCategoryId = intval($data['business_category_id'] ?? 0);
-            $productCategoryId = intval($data['product_category_id'] ?? 0);
-            $name = sanitizeInput($data['name'] ?? '');
-            $description = sanitizeInput($data['description'] ?? '');
-            $shortDescription = sanitizeInput($data['short_description'] ?? '');
-            $price = floatval($data['price'] ?? 0);
-            $isFeatured = boolval($data['is_featured'] ?? false);
-            $displayOrder = intval($data['display_order'] ?? 0);
-            
+            // Unified add/edit logic
+            $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+            $businessCategoryId = intval($_POST['business_category_id'] ?? 0);
+            $productCategoryId = intval($_POST['product_category_id'] ?? 0);
+            $name = sanitizeInput($_POST['name'] ?? '');
+            $description = sanitizeInput($_POST['description'] ?? '');
+            $shortDescription = sanitizeInput($_POST['short_description'] ?? '');
+            $price = floatval($_POST['price'] ?? 0);
+            $isFeatured = isset($_POST['is_featured']) ? 1 : 0;
+            $isActive = isset($_POST['is_active']) ? 1 : 0;
+            $displayOrder = intval($_POST['display_order'] ?? 0);
             if (empty($businessCategoryId) || empty($name)) {
                 sendErrorResponse('Business category ID and product name are required');
             }
-            
             $slug = generateSlug($name);
-            
             // Handle image upload
             $imageUrl = '';
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
@@ -201,14 +219,25 @@ function handlePostRequest($action, $db) {
                 $categorySlug = $businessCategory['slug'] ?? 'general';
                 $imageUrl = uploadImage($_FILES['image'], $categorySlug);
             }
-            
-            $db->query(
-                "INSERT INTO products (business_category_id, product_category_id, name, slug, description, short_description, image_url, price, is_featured, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [$businessCategoryId, $productCategoryId, $name, $slug, $description, $shortDescription, $imageUrl, $price, $isFeatured, $displayOrder]
-            );
-            
-            $id = $db->lastInsertId();
-            sendSuccessResponse(['id' => $id], 'Product created successfully');
+            if ($id) {
+                // Edit
+                $existing = $db->fetch("SELECT * FROM products WHERE id=?", [$id]);
+                if (!$existing) sendErrorResponse('Product not found');
+                if (!$imageUrl) $imageUrl = $existing['image_url'];
+                $db->query(
+                    "UPDATE products SET business_category_id=?, product_category_id=?, name=?, slug=?, description=?, short_description=?, image_url=?, price=?, is_featured=?, is_active=?, display_order=? WHERE id=?",
+                    [$businessCategoryId, $productCategoryId, $name, $slug, $description, $shortDescription, $imageUrl, $price, $isFeatured, $isActive, $displayOrder, $id]
+                );
+                sendSuccessResponse(['id' => $id], 'Product updated successfully');
+            } else {
+                // Add
+                $db->query(
+                    "INSERT INTO products (business_category_id, product_category_id, name, slug, description, short_description, image_url, price, is_featured, is_active, display_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    [$businessCategoryId, $productCategoryId, $name, $slug, $description, $shortDescription, $imageUrl, $price, $isFeatured, $isActive, $displayOrder]
+                );
+                $newId = $db->lastInsertId();
+                sendSuccessResponse(['id' => $newId], 'Product created successfully');
+            }
             break;
             
         case 'product-image':

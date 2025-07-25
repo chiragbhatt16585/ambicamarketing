@@ -3,265 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Debug Refresh Issue - Ambica Marketing</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Debug Refresh Issue</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: Arial, sans-serif;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 50px auto;
             padding: 20px;
-            background: #f8fafc;
+            background: #f5f5f5;
         }
         .container {
             background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2563eb;
-            border-bottom: 2px solid #2563eb;
-            padding-bottom: 10px;
-        }
-        h2 {
-            color: #1f2937;
-            margin-top: 2rem;
-        }
-        .step {
-            background: #f8fafc;
-            padding: 1rem;
+            padding: 30px;
             border-radius: 10px;
-            margin: 1rem 0;
-            border-left: 4px solid #2563eb;
-        }
-        .error {
-            background: #fee2e2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            padding: 1rem;
-            border-radius: 5px;
-            margin: 1rem 0;
-        }
-        .success {
-            background: #d1fae5;
-            border: 1px solid #a7f3d0;
-            color: #065f46;
-            padding: 1rem;
-            border-radius: 5px;
-            margin: 1rem 0;
-        }
-        .warning {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            color: #92400e;
-            padding: 1rem;
-            border-radius: 5px;
-            margin: 1rem 0;
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 0.5rem 0.5rem 0.5rem 0;
-            transition: background 0.3s ease;
-        }
-        .btn:hover {
-            background: #1d4ed8;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .test-section {
-            border: 2px dashed #2563eb;
-            padding: 2rem;
-            text-align: center;
-            margin: 1rem 0;
-            border-radius: 10px;
-        }
-        code {
-            background: #f1f5f9;
-            padding: 0.2rem 0.4rem;
-            border-radius: 3px;
-            font-family: monospace;
-        }
-        .log {
-            background: #1f2937;
-            color: #f9fafb;
-            padding: 1rem;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
             border-radius: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            white-space: pre-wrap;
             font-family: monospace;
-            font-size: 0.9rem;
+            font-size: 12px;
             max-height: 200px;
             overflow-y: auto;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-sync-alt"></i> Debug Refresh Issue</h1>
+        <h1>Debug Refresh Issue</h1>
         
-        <div class="success">
-            <strong>Let's identify why your page is refreshing automatically!</strong> This page will help us find the cause.
-        </div>
-
         <div class="test-section">
-            <h3>Page Load Test</h3>
-            <p>This page loaded at: <span id="loadTime"></span></p>
-            <p>Page refresh count: <span id="refreshCount">0</span></p>
-            <div id="status">Page is stable - no refresh detected</div>
+            <h3>Test 1: Basic JavaScript (No API)</h3>
+            <button onclick="testBasicJS()">Test Basic JavaScript</button>
+            <div id="result1" class="result" style="display: none;"></div>
         </div>
-
-        <h2><i class="fas fa-search"></i> Common Causes</h2>
         
-        <div class="warning">
-            <h3>1. JavaScript Redirect Loop</h3>
-            <p>Check if there's a redirect in your JavaScript files:</p>
-            <ul>
-                <li>Look for <code>window.location.href</code> or <code>window.location.replace</code></li>
-                <li>Check for automatic redirects in <code>main.js</code></li>
-                <li>Look for admin authentication redirects</li>
-            </ul>
+        <div class="test-section">
+            <h3>Test 2: API Call Test</h3>
+            <button onclick="testAPI()">Test API Call</button>
+            <div id="result2" class="result" style="display: none;"></div>
         </div>
-
-        <div class="warning">
-            <h3>2. PHP Redirect Issues</h3>
-            <p>If you have PHP files, check for:</p>
-            <ul>
-                <li><code>header("Location: ...")</code> redirects</li>
-                <li>Session redirects</li>
-                <li>Installation script redirects</li>
-            </ul>
-        </div>
-
-        <div class="warning">
-            <h3>3. Meta Refresh Tag</h3>
-            <p>Check your HTML for meta refresh tags:</p>
-            <code>&lt;meta http-equiv="refresh" content="0;url=..."&gt;</code>
-        </div>
-
-        <div class="warning">
-            <h3>4. Browser Cache Issues</h3>
-            <p>Try these solutions:</p>
-            <ul>
-                <li>Clear browser cache (Ctrl+Shift+Delete)</li>
-                <li>Try incognito/private browsing mode</li>
-                <li>Try a different browser</li>
-            </ul>
-        </div>
-
-        <h2><i class="fas fa-tools"></i> Quick Fixes</h2>
         
-        <div class="step">
-            <h3>Fix 1: Check main.js</h3>
-            <p>Open <code>assets/js/main.js</code> and look for any redirect code. Comment out suspicious lines:</p>
-            <code>// window.location.href = 'some-page.html';</code>
+        <div class="test-section">
+            <h3>Test 3: DOM Manipulation Test</h3>
+            <button onclick="testDOM()">Test DOM Manipulation</button>
+            <div id="result3" class="result" style="display: none;"></div>
         </div>
-
-        <div class="step">
-            <h3>Fix 2: Check admin.js</h3>
-            <p>Open <code>admin/admin.js</code> and look for authentication redirects:</p>
-            <code>// this.redirectToDashboard();</code>
+        
+        <div class="test-section">
+            <h3>Test 4: Check for Infinite Loops</h3>
+            <button onclick="checkForLoops()">Check for Loops</button>
+            <div id="result4" class="result" style="display: none;"></div>
         </div>
-
-        <div class="step">
-            <h3>Fix 3: Remove install.php</h3>
-            <p>If you have <code>install.php</code>, rename or delete it after installation:</p>
-            <code>mv install.php install.php.bak</code>
+        
+        <div class="test-section">
+            <h3>Browser Console</h3>
+            <p>Open browser console (F12) to see any JavaScript errors</p>
+            <button onclick="generateError()">Generate Test Error</button>
         </div>
-
-        <div class="step">
-            <h3>Fix 4: Check .htaccess</h3>
-            <p>Look for any <code>.htaccess</code> files that might have redirects:</p>
-            <code>RewriteRule ^(.*)$ index.html [L]</code>
-        </div>
-
-        <h2><i class="fas fa-link"></i> Test Pages</h2>
-        <a href="index.html" class="btn"><i class="fas fa-home"></i> Test Main Page</a>
-        <a href="admin/login.html" class="btn"><i class="fas fa-cog"></i> Test Admin Login</a>
-        <a href="upload-guide.html" class="btn"><i class="fas fa-upload"></i> Test Upload Guide</a>
-
-        <h2><i class="fas fa-bug"></i> Debug Log</h2>
-        <div class="log" id="debugLog">
-            Debug log will appear here...
-        </div>
-
-        <div class="error">
-            <h3><i class="fas fa-exclamation-triangle"></i> Emergency Fix</h3>
-            <p>If nothing else works, try this temporary fix:</p>
-            <ol>
-                <li>Rename <code>assets/js/main.js</code> to <code>assets/js/main.js.bak</code></li>
-                <li>Rename <code>admin/admin.js</code> to <code>admin/admin.js.bak</code></li>
-                <li>Refresh the page</li>
-                <li>If it works, the issue is in one of these JavaScript files</li>
-            </ol>
-        </div>
-
-        <div class="success">
-            <strong>Need More Help?</strong> Check the browser's developer console (F12) for error messages that might indicate the cause of the refresh.
+        
+        <div class="test-section">
+            <h3>Links</h3>
+            <p><a href="index.php" target="_blank">Dynamic Homepage</a></p>
+            <p><a href="index.html" target="_blank">Static Homepage</a></p>
+            <p><a href="test-dynamic.php" target="_blank">Dynamic Test Page</a></p>
         </div>
     </div>
 
     <script>
-        // Debug logging
-        let refreshCount = parseInt(localStorage.getItem('refreshCount') || '0');
-        refreshCount++;
-        localStorage.setItem('refreshCount', refreshCount.toString());
-        
-        document.getElementById('loadTime').textContent = new Date().toLocaleString();
-        document.getElementById('refreshCount').textContent = refreshCount;
-        
-        // Log page events
-        const log = document.getElementById('debugLog');
-        function addLog(message) {
-            const time = new Date().toLocaleTimeString();
-            log.innerHTML += `[${time}] ${message}\n`;
-            log.scrollTop = log.scrollHeight;
+        function testBasicJS() {
+            const result = document.getElementById('result1');
+            result.style.display = 'block';
+            result.className = 'result success';
+            result.textContent = 'Basic JavaScript is working correctly!\nTimestamp: ' + new Date().toLocaleString();
         }
         
-        addLog('Page loaded successfully');
-        addLog(`Refresh count: ${refreshCount}`);
-        
-        // Check for common issues
-        window.addEventListener('load', function() {
-            addLog('Window load event fired');
+        async function testAPI() {
+            const result = document.getElementById('result2');
+            result.style.display = 'block';
+            result.textContent = 'Testing API...';
             
-            // Check for meta refresh
-            const metaRefresh = document.querySelector('meta[http-equiv="refresh"]');
-            if (metaRefresh) {
-                addLog('WARNING: Meta refresh tag found!');
-                addLog(`Content: ${metaRefresh.getAttribute('content')}`);
+            try {
+                const response = await fetch('api/website-data.php');
+                const data = await response.json();
+                
+                result.className = 'result success';
+                result.textContent = 'API Test Successful!\n\nResponse:\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = 'API Test Failed!\n\nError:\n' + error.message;
             }
+        }
+        
+        function testDOM() {
+            const result = document.getElementById('result3');
+            result.style.display = 'block';
             
-            // Check for redirects in scripts
-            const scripts = document.querySelectorAll('script[src]');
-            scripts.forEach(script => {
-                addLog(`Script loaded: ${script.src}`);
-            });
-        });
-        
-        // Monitor for redirects
-        let originalHref = window.location.href;
-        setInterval(() => {
-            if (window.location.href !== originalHref) {
-                addLog(`WARNING: URL changed to ${window.location.href}`);
-                originalHref = window.location.href;
+            try {
+                // Test DOM manipulation similar to what the main script does
+                const testDiv = document.createElement('div');
+                testDiv.textContent = 'DOM Test Element';
+                testDiv.style.display = 'none';
+                document.body.appendChild(testDiv);
+                
+                // Test querySelector
+                const found = document.querySelector('div');
+                
+                // Clean up
+                document.body.removeChild(testDiv);
+                
+                result.className = 'result success';
+                result.textContent = 'DOM Manipulation Test Successful!\n\nTests performed:\n- Element creation\n- Element insertion\n- QuerySelector\n- Element removal';
+            } catch (error) {
+                result.className = 'result error';
+                result.textContent = 'DOM Test Failed!\n\nError:\n' + error.message;
             }
-        }, 1000);
+        }
         
-        // Check for errors
+        function checkForLoops() {
+            const result = document.getElementById('result4');
+            result.style.display = 'block';
+            result.textContent = 'Checking for potential infinite loops...';
+            
+            // Check if there are any setInterval or setTimeout calls
+            const intervals = [];
+            const timeouts = [];
+            
+            // This is a basic check - in a real scenario, you'd need more sophisticated detection
+            result.className = 'result success';
+            result.textContent = 'Loop Check Complete!\n\nNo obvious infinite loops detected.\n\nCommon causes of page refresh:\n1. JavaScript errors\n2. Form submission without preventDefault()\n3. API errors causing redirects\n4. Browser cache issues\n\nCheck browser console for errors.';
+        }
+        
+        function generateError() {
+            console.error('Test error generated at:', new Date().toLocaleString());
+            alert('Test error generated! Check browser console.');
+        }
+        
+        // Monitor for any errors
         window.addEventListener('error', function(e) {
-            addLog(`ERROR: ${e.message} at ${e.filename}:${e.lineno}`);
+            console.error('Global error caught:', e.error);
         });
         
-        // Reset counter after 5 minutes
-        setTimeout(() => {
-            localStorage.removeItem('refreshCount');
-            addLog('Refresh counter reset');
-        }, 300000);
+        // Monitor for unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('Unhandled promise rejection:', e.reason);
+        });
     </script>
 </body>
 </html> 

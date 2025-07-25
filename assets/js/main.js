@@ -1,12 +1,16 @@
 // Main JavaScript for Ambica Marketing Website
 document.addEventListener('DOMContentLoaded', function() {
     initializeWebsite();
+    initializeHeroSlider();
 });
 
 async function initializeWebsite() {
     try {
         // Initialize mobile menu
         initializeMobileMenu();
+        
+        // Load dynamic website data
+        await loadDynamicWebsiteData();
         
         // Load products dynamically
         await loadProductsFromAPI();
@@ -22,6 +26,200 @@ async function initializeWebsite() {
         
     } catch (error) {
         console.error('Error initializing website:', error);
+    }
+}
+
+async function loadDynamicWebsiteData() {
+    try {
+        const response = await fetch('api/website-data.php');
+        const data = await response.json();
+        
+        if (data.success && data.data) {
+            updateWebsiteContent(data.data);
+        }
+    } catch (error) {
+        console.error('Error loading dynamic website data:', error);
+        // Continue with static content if API fails
+    }
+}
+
+function updateWebsiteContent(data) {
+    // Update company information
+    updateCompanyInfo(data.company);
+    
+    // Update business sections
+    if (data.business_categories) {
+        updateBusinessSections(data.business_categories);
+    }
+    
+    // Update featured products
+    if (data.featured_products) {
+        updateFeaturedProducts(data.featured_products);
+    }
+    
+    // Update statistics
+    if (data.statistics) {
+        updateStatistics(data.statistics);
+    }
+    
+    // Update contact information
+    updateContactInfo(data.company);
+    
+    // Update footer
+    updateFooter(data.company);
+}
+
+function updateCompanyInfo(companyData) {
+    // Update page title
+    const title = document.querySelector('title');
+    if (title && companyData.company_name) {
+        title.textContent = `${companyData.company_name} - Home Automation & Security Solutions`;
+    }
+    
+    // Update logo alt text
+    const logo = document.querySelector('.logo-img');
+    if (logo && companyData.company_name) {
+        logo.alt = companyData.company_name;
+    }
+    
+    // Update about section
+    const aboutText = document.querySelector('.about-text p');
+    if (aboutText && companyData.company_description) {
+        aboutText.textContent = companyData.company_description;
+    }
+}
+
+function updateBusinessSections(categories) {
+    const businessGrid = document.querySelector('.business-grid');
+    if (!businessGrid) return;
+    
+    businessGrid.innerHTML = categories.map(category => `
+        <div class="business-card">
+            <div class="business-icon">
+                <i class="${category.icon_class || 'fas fa-building'}"></i>
+            </div>
+            <h3>${category.name}</h3>
+            <p>${category.description || ''}</p>
+            <a href="${category.slug === 'cnc-machine-spare-parts' ? 'cnc.html' : 'automation.html'}" class="btn btn-primary">
+                Explore ${category.name.split(' ')[0]} Business
+            </a>
+        </div>
+    `).join('');
+}
+
+function updateFeaturedProducts(products) {
+    // Only update if there's a featured products section on the page
+    const productsSection = document.querySelector('#products .products-grid');
+    if (!productsSection) return;
+    
+    productsSection.innerHTML = products.map(product => `
+        <div class="product-card">
+            <div class="product-image">
+                <img src="${product.image_url}" alt="${product.name}" onerror="this.src='assets/images/placeholder.jpg'">
+            </div>
+            <div class="product-content">
+                <h3>${product.name}</h3>
+                <p class="product-category">${product.business_category_name}</p>
+                <p class="product-description">${product.short_description || product.description || ''}</p>
+                ${product.price ? `<p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>` : ''}
+                <a href="#contact" class="btn btn-primary">Get Quote</a>
+            </div>
+        </div>
+    `).join('');
+}
+
+function updateStatistics(stats) {
+    // Keep Happy Customers and Installations static
+    // Only update if needed for other statistics
+    const statElements = document.querySelectorAll('.about-stats .stat h3');
+    if (statElements.length >= 3) {
+        // Keep first two stats static (500+ and 1000+)
+        statElements[0].textContent = '500+';  // Happy Customers - static
+        statElements[1].textContent = '1000+'; // Installations - static
+        statElements[2].textContent = '24/7';  // Support - static
+    }
+}
+
+function updateContactInfo(companyData) {
+    // Update contact section
+    const contactItems = document.querySelectorAll('.contact-item');
+    contactItems.forEach(item => {
+        const icon = item.querySelector('.contact-icon i');
+        if (icon) {
+            const iconClass = icon.className;
+            
+            if (iconClass.includes('map-marker-alt') && companyData.company_address) {
+                item.querySelector('p').textContent = companyData.company_address;
+            } else if (iconClass.includes('phone') && companyData.company_phone) {
+                const phoneLink = item.querySelector('p a') || item.querySelector('p');
+                phoneLink.textContent = companyData.company_phone;
+                if (phoneLink.tagName === 'A') {
+                    phoneLink.href = `tel:${companyData.company_phone}`;
+                }
+            } else if (iconClass.includes('envelope') && companyData.company_email) {
+                const emailLink = item.querySelector('p a') || item.querySelector('p');
+                emailLink.textContent = companyData.company_email;
+                if (emailLink.tagName === 'A') {
+                    emailLink.href = `mailto:${companyData.company_email}`;
+                }
+            } else if (iconClass.includes('whatsapp') && companyData.whatsapp_number) {
+                const whatsappLink = item.querySelector('p a') || item.querySelector('p');
+                whatsappLink.textContent = companyData.whatsapp_number;
+                if (whatsappLink.tagName === 'A') {
+                    whatsappLink.href = `https://wa.me/${companyData.whatsapp_number.replace(/[^0-9]/g, '')}`;
+                }
+            } else if (iconClass.includes('clock') && companyData.working_hours) {
+                item.querySelector('p').textContent = companyData.working_hours;
+            }
+        }
+    });
+}
+
+function updateFooter(companyData) {
+    // Update footer company name
+    const footerCompanyName = document.querySelector('.footer-section h3');
+    if (footerCompanyName && companyData.company_name) {
+        footerCompanyName.textContent = companyData.company_name;
+    }
+    
+    // Update footer contact info - find contact items by icon class
+    const contactItems = document.querySelectorAll('.footer-contact-item');
+    contactItems.forEach(item => {
+        const icon = item.querySelector('i');
+        if (!icon) return;
+        
+        const iconClass = icon.className;
+        
+        if (iconClass.includes('fa-phone') && companyData.company_phone) {
+            const phoneLink = item.querySelector('a');
+            if (phoneLink) {
+                phoneLink.textContent = companyData.company_phone;
+                phoneLink.href = `tel:${companyData.company_phone}`;
+            }
+        } else if (iconClass.includes('fa-envelope') && companyData.company_email) {
+            const emailLink = item.querySelector('a');
+            if (emailLink) {
+                emailLink.textContent = companyData.company_email;
+                emailLink.href = `mailto:${companyData.company_email}`;
+            }
+        } else if (iconClass.includes('fa-clock') && companyData.working_hours) {
+            const hoursSpan = item.querySelector('span');
+            if (hoursSpan) {
+                hoursSpan.textContent = companyData.working_hours;
+            }
+        } else if (iconClass.includes('fa-whatsapp') && companyData.whatsapp_number) {
+            const whatsappLink = item.querySelector('a');
+            if (whatsappLink) {
+                whatsappLink.textContent = companyData.whatsapp_number;
+                whatsappLink.href = `https://wa.me/${companyData.whatsapp_number.replace(/[^0-9]/g, '')}`;
+            }
+        }
+    });
+    
+    // Update copyright year
+    const copyright = document.querySelector('.footer-bottom p');
+    if (copyright && companyData.company_name) {
+        copyright.innerHTML = `&copy; ${new Date().getFullYear()} ${companyData.company_name}. All rights reserved.`;
     }
 }
 
@@ -389,4 +587,47 @@ class AdminAuth {
 let adminAuth;
 if (window.location.pathname.includes('admin/')) {
     adminAuth = new AdminAuth();
+} 
+
+function initializeHeroSlider() {
+    const slides = document.querySelectorAll('.hero-slide');
+    const dotsContainer = document.getElementById('heroSliderDots');
+    if (!slides.length) return;
+    let current = 0;
+    let interval = null;
+
+    // Create dots
+    if (dotsContainer) {
+        dotsContainer.innerHTML = '';
+        slides.forEach((_, i) => {
+            const dot = document.createElement('span');
+            dot.className = 'hero-slider-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => showSlide(i));
+            dotsContainer.appendChild(dot);
+        });
+    }
+
+    function showSlide(idx) {
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === idx);
+        });
+        if (dotsContainer) {
+            const dots = dotsContainer.querySelectorAll('.hero-slider-dot');
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+        }
+        current = idx;
+    }
+
+    function nextSlide() {
+        showSlide((current + 1) % slides.length);
+    }
+
+    interval = setInterval(nextSlide, 5000);
+
+    // Pause on hover
+    const slider = document.getElementById('heroSlider');
+    if (slider) {
+        slider.addEventListener('mouseenter', () => clearInterval(interval));
+        slider.addEventListener('mouseleave', () => interval = setInterval(nextSlide, 5000));
+    }
 } 
