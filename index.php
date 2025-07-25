@@ -78,7 +78,7 @@ if (file_exists('api/website-data.php')) {
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="cnc.html" class="nav-link">CNC Machine Spare Parts</a></li>
+                    <li class="nav-item"><a href="cnc.php" class="nav-link">CNC Machine Spare Parts</a></li>
                     <li class="nav-item"><a href="automation.php" class="nav-link">Automation & Road Safety</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>

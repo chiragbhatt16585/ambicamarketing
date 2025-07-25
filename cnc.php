@@ -1,9 +1,4 @@
-<script>console.log('Page loaded at', new Date().toLocaleTimeString());</script>
 <?php
-// ini_set('display_errors', 1);
-// ini_set('display_startup_errors', 1);
-// error_reporting(E_ALL);
-
 require_once 'api/config.php';
 
 try {
@@ -14,13 +9,13 @@ try {
     foreach ($settings as $setting) {
         $companyData[$setting['setting_key']] = $setting['setting_value'];
     }
-    // Fetch Automation & Road Safety Products (business_category_id = 2)
+    // Fetch CNC Machine Spare Parts, Oil & Grease (business_category_id = 1)
     $products = $db->fetchAll("
         SELECT p.*, bc.name as business_category_name, pc.name as product_category_name
         FROM products p
         JOIN business_categories bc ON p.business_category_id = bc.id
         LEFT JOIN product_categories pc ON p.product_category_id = pc.id
-        WHERE p.is_active = 1 AND p.business_category_id = 2
+        WHERE p.is_active = 1 AND p.business_category_id = 1
         ORDER BY p.display_order, p.name
     ");
 } catch (Exception $e) {
@@ -35,7 +30,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Automation & Road Safety Products | <?php echo htmlspecialchars($companyData['company_name'] ?? 'Ambica Marketing'); ?></title>
+    <title>CNC Machine Spare Parts, Oil & Grease | <?php echo htmlspecialchars($companyData['company_name'] ?? 'Ambica Marketing'); ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -51,8 +46,8 @@ try {
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item"><a href="index.php" class="nav-link">Home</a></li>
-                    <li class="nav-item"><a href="cnc.html" class="nav-link">CNC Machine Spare Parts</a></li>
-                    <li class="nav-item"><a href="automation.php" class="nav-link active">Automation & Road Safety</a></li>
+                    <li class="nav-item"><a href="cnc.php" class="nav-link active">CNC Machine Spare Parts</a></li>
+                    <li class="nav-item"><a href="automation.php" class="nav-link">Automation & Road Safety</a></li>
                     <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
                 </ul>
                 <div class="hamburger">
@@ -66,8 +61,8 @@ try {
     <section class="products" style="padding-top:100px;">
         <div class="container">
             <div class="section-header">
-                <h1>Automation & Road Safety Products</h1>
-                <p>Explore our range of automation and road safety solutions</p>
+                <h1>CNC Machine Spare Parts, Oil & Grease</h1>
+                <p>Explore our range of CNC machine parts, oil, and grease</p>
             </div>
             <div class="products-grid">
                 <?php foreach ($products as $product): ?>
@@ -100,12 +95,12 @@ try {
         <div class="container">
             <div class="section-header">
                 <h2>Contact Us</h2>
-                <p>Get in touch for professional security solutions</p>
+                <p>Get in touch for professional CNC solutions</p>
             </div>
             <div class="contact-content">
                 <div class="contact-info">
                     <h3><?php echo htmlspecialchars($companyData['company_name'] ?? 'Ambica Marketing'); ?></h3>
-                    <p>Your trusted partner for home automation and security solutions.</p>
+                    <p>Your trusted partner for CNC machine parts and lubricants.</p>
                 </div>
                 <div class="contact-form">
                     <form id="contactForm">
@@ -139,6 +134,7 @@ try {
                     <h4>Quick Links</h4>
                     <ul>
                         <li><a href="index.php">Home</a></li>
+                        <li><a href="cnc.php">CNC Parts</a></li>
                         <li><a href="automation.php">Automation</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
@@ -166,40 +162,36 @@ try {
     </footer>
     <script src="assets/js/main.js"></script>
     <script>
-        // Remove or fix any code that could cause auto-refresh
-        // (No auto-refresh logic should be present)
-    </script>
-    <script>
-function scrollToContactAndFill(product, category) {
-    var info = '';
-    if (category && product) {
-        info = 'Product: ' + category + ' - ' + product;
-    } else if (product) {
-        info = 'Product: ' + product;
-    } else {
-        info = '';
-    }
-    document.getElementById('productInterest').value = info.replace(/^Product: /, ''); // hidden field: just category - product
-    var message = document.getElementById('message');
-    if (message) {
-        if (!message.value.startsWith(info)) {
-            message.value = info + '\n' + (message.value.replace(/^Product:.*\n/, ''));
+    function scrollToContactAndFill(product, category) {
+        var info = '';
+        if (category && product) {
+            info = 'Product: ' + category + ' - ' + product;
+        } else if (product) {
+            info = 'Product: ' + product;
+        } else {
+            info = '';
         }
+        document.getElementById('productInterest').value = info.replace(/^Product: /, ''); // hidden field: just category - product
+        var message = document.getElementById('message');
+        if (message) {
+            if (!message.value.startsWith(info)) {
+                message.value = info + '\n' + (message.value.replace(/^Product:.*\n/, ''));
+            }
+        }
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        document.getElementById('name').focus();
     }
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-        contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    document.getElementById('name').focus();
-}
-document.querySelectorAll('.get-quote-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        const product = this.getAttribute('data-product');
-        const category = this.getAttribute('data-category');
-        scrollToContactAndFill(product, category);
+    document.querySelectorAll('.get-quote-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const product = this.getAttribute('data-product');
+            const category = this.getAttribute('data-category');
+            scrollToContactAndFill(product, category);
+        });
     });
-});
-</script>
+    </script>
 </body>
 </html> 
